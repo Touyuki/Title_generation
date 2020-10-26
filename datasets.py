@@ -1,4 +1,4 @@
-#将自定义数据制作成数据库
+# create a dataset with local images
 import torch
 import os, glob
 import csv
@@ -14,25 +14,22 @@ class title_m(Dataset):
         self.images, self.labels = self.load_csv("images.csv")
 
     def load_csv(self, filename):
-        # 是否已经存在了cvs文件
+        # check if there exits a cvs file
         if not os.path.exists(os.path.join(self.root, filename)):
-            # for name in self.name2label:
             images = []
             for name in {"0"}:
                 dis = self.root + "train/" + "*.png"
-                # print(dis)
                 images += glob.glob(dis)
-                # print(len(images), images,name)
 
             with open(os.path.join(self.root, filename), mode="w", newline="") as f:
                 writer = csv.writer(f)
-                for img in images:  # 'pokemon/pikachu/00000058.png'
+                for img in images:
                     name = img[16:23]
                     label = name
-                    # 将图片路径以及对应的标签写入到csv文件中
+                    # write the dir and the label of the image into the csv file
                     writer.writerow([img, label])
 
-        # 如果已经存在了csv文件，则读取csv文件
+        # if there exits a cvs file, read it
         images2, labels = [], []
         with open(os.path.join(self.root, filename)) as f:
             reader = csv.reader(f)
@@ -41,7 +38,7 @@ class title_m(Dataset):
                 images2.append(img)
                 labels.append(label)
         assert len(images2) == len(labels)
-        templates = np.zeros((len(images2), 1, 64, 448), dtype=np.short)
+        templates = np.zeros((len(images2), 1, 64, 448), dtype=np.short)  # the size is 64*448
         ten_s = []
         for i in range(0, len(images2)):
             templates[i, 0, :, :] = io.imread(images2[i]).astype(np.short)

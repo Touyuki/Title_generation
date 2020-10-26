@@ -6,11 +6,8 @@ class Generator(nn.Module):
       super(Generator, self).__init__()
       self.ngpu = ngpu
       self.main = nn.Sequential(
-          # nn.Linear(42, 100),
-          # nn.ReLU(True),
-          # nn.Linear(100, 7),
-          # nn.ReLU(True),
-          nn.ConvTranspose2d( 42, ngf * 32, (1,7), 1, 0, bias=False),
+          nn.ConvTranspose2d(189, ngf * 32, (1, 7), 1, 0, bias=False),
+          # nn.ConvTranspose2d( 42, ngf * 32, (1,7), 1, 0, bias=False),
           nn.BatchNorm2d(ngf * 32),
           nn.ReLU(True),
           nn.ConvTranspose2d( ngf * 32, ngf * 16, 4, 2, 1, bias=False),
@@ -19,7 +16,7 @@ class Generator(nn.Module):
           nn.ConvTranspose2d( ngf * 16, ngf * 8, 4, 2, 1, bias=False),
           nn.BatchNorm2d(ngf * 8),
           nn.ReLU(True),
-          nn.ConvTranspose2d( ngf * 8, ngf*4, 4, 2, 1, bias=False),##56*8
+          nn.ConvTranspose2d( ngf * 8, ngf*4, 4, 2, 1, bias=False),
           nn.BatchNorm2d(ngf*4),
           nn.ReLU(True),
           nn.ConvTranspose2d( ngf*4, ngf*2, 4, 2, 1, bias=False),
@@ -32,8 +29,9 @@ class Generator(nn.Module):
           nn.Tanh()
       )
    def forward(self, input):
+        # x=self.main2(input)
         return self.main(input)
-# custom weights initialization called on netG and netD
+# custom weights initialization
 def weights_init(m):
     classname = m.__class__.__name__
     if classname.find('Conv') != -1:
